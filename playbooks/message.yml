@@ -1,0 +1,10 @@
+---
+- name: Respond to a GroupMe message
+  hosts: all
+  tasks:
+    - name: POST reply
+      ansible.builtin.uri:
+        url: https://api.groupme.com/v3/bots/post
+        body:
+          bot_id: "{{ bot_id }}"
+          text: EDA message here
