@@ -10,5 +10,5 @@
         body_format: json
         body:
           bot_id: "{{ bot_id }}"
-          text: A message was sent
+          text: An image was sent
         status_code: [200, 202]

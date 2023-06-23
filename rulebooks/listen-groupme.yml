@@ -6,7 +6,35 @@
         host: 0.0.0.0
         port: 5000
   rules:
-    - name: Catch a regular message
-      condition: event.payload.attachments == []
+    - name: Capture user created events
+      condition: event.payload.sender_type == 'user'
       action:
-        run_playbook: ../playbooks/message.yml
+        post_event:
+          event:
+            name: "{{ event.payload.name }}"
+            attachments: "{{ event.payload.attachments[0] | default(false) }}"
+            text: "{{ event.payload.text }}" 
+
+    - name: Respond to a message
+      condition: event.text != '' and event.attachments == false
+      action:
+        run_playbook:
+          name: playbooks/message.yml
+          extra_vars:
+            bot_id: "{{ BOT_ID }}"
+
+    - name: Respond to an image
+      condition: event.attachments.type == 'image'
+      action:
+        run_playbook:
+          name: playbooks/image.yml
+          extra_vars:
+            bot_id: "{{ BOT_ID }}"
+
+    - name: Respond to a poll
+      condition: event.attachments.type == 'poll'
+      action:
+        run_playbook:
+          name: playbooks/poll.yml
+          extra_vars:
+            bot_id: "{{ BOT_ID }}"
