@@ -13,7 +13,7 @@
           event:
             name: "{{ event.payload.name }}"
             attachments: "{{ event.payload.attachments[0] | default(false) }}"
-            text: "{{ event.payload.text }}" 
+            text: "{{ event.payload.text }}"
 
     - name: Respond to a message
       condition: event.text != '' and event.attachments == false
